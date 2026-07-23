@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>FairFeed onboarding — one column, A/B left, C right</title>
+<style>
+  :root{
+    --slate:#20283a;
+    --ink:#1d2330; --ink-soft:#697184; --ink-faint:#9aa2b1;
+    --line:#e7e9f0;
+    --boost:#1b8e3b; --boost-bg:#e9f8ef; --boost-bd:#bce6cf; --boost-ink:#0f7a3e;
+    --m1:#3182bd;   --m1-bg:#eaf2fa;   --m1-bd:#bcd6ee;   --m1-ink:#1d5a92;   /* fairness */
+    --m2:#cc4c02;   --m2-bg:#fceee3;   --m2-bd:#f3cba9;   --m2-ink:#9a3a02;   /* vetting */
+    --m3:#3d57d6;   --m3-bg:#eef1fe;   --m3-bd:#c2cbf6;   --m3-ink:#2a3aa6;   /* transparency */
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:#fff; }
+  body{
+    font-family:"Inter","Open Sans","Helvetica Neue",Arial,sans-serif;
+    color:var(--ink); font-size:6pt; -webkit-font-smoothing:antialiased; text-rendering:geometricPrecision;
+  }
+
+  .figure{ width:241.147pt; padding:1pt; background:#fff; }
+  .strip{ display:flex; align-items:stretch; gap:0; }
+
+  .left{ flex:0 0 92pt; display:flex; flex-direction:column; }
+  .arrowH{ flex:0 0 9pt; align-self:center; text-align:center; color:#c4ccda; font-size:8pt; line-height:1; }
+  .arrowV{ text-align:center; color:#c4ccda; font-size:8pt; line-height:1; padding:0.5pt 0; }
+
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:5pt;
+    padding:2.5pt 4pt 2.5pt; display:flex; flex-direction:column;
+    box-shadow:0 .6pt 1.4pt rgba(20,30,55,.05), 0 4pt 9pt -7pt rgba(20,30,55,.30);
+  }
+  .left .panel.a{ flex:1 1 auto; }              /* A grows to balance height */
+  .colC{ flex:1 1 auto; min-width:0; }
+
+  .head{ display:flex; align-items:center; gap:3.5pt; margin:0 0 1.5pt; }
+  .badge{
+    flex:0 0 auto; width:10pt; height:10pt; border-radius:50%;
+    background:var(--slate); color:#fff; font-weight:800; font-size:6pt;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  .title{ margin:0; font-size:6.6pt; font-weight:750; color:var(--ink); line-height:1.06; letter-spacing:-.01em; }
+
+  /* A */
+  .abody{ flex:1 1 auto; display:flex; align-items:center; }
+  .brief{
+    background:#fff; border:1px solid var(--line); border-radius:4pt;
+    padding:2.5pt 4pt; font-size:5.4pt; line-height:1.3; color:var(--ink);
+  }
+  .brief b{ font-weight:700; }
+
+  /* B */
+  .gl{ font-size:5pt; font-weight:800; letter-spacing:.06em; text-transform:uppercase; margin:1.5pt 0 0.5pt; }
+  .gl.want{ color:var(--boost-ink); } .gl.avoid{ color:var(--m2-ink); }
+  .chips{ display:flex; flex-direction:column; gap:1.5pt; }
+  .schip{ display:flex; align-items:center; gap:3pt; border-radius:999px; padding:1.6pt 5pt; font-size:5.6pt; font-weight:650; line-height:1; }
+  .schip .lbl{ flex:1 1 auto; min-width:0; }
+  .schip.want{ background:var(--boost-bg); border:1px solid var(--boost-bd); color:var(--boost-ink); }
+  .schip.avoid{ background:var(--m2-bg); border:1px solid var(--m2-bd); color:var(--m2-ink); }
+  .schip.add{ background:#fff; border:1px dashed #cfd5e2; color:var(--ink-faint); justify-content:center; }
+  .schip .x{ flex:0 0 auto; font-size:6.5pt; opacity:.55; font-weight:700; }
+  .cbtn{
+    display:block; text-align:center; margin-top:2pt;
+    background:var(--slate); color:#fff; font-size:5.8pt; font-weight:750;
+    padding:2.5pt 5pt; border-radius:5pt; box-shadow:0 2pt 6pt -3pt rgba(20,28,42,.45);
+  }
+
+  /* C */
+  .feed{ display:flex; flex-direction:column; gap:2.5pt; flex:1 1 auto; justify-content:space-between; }
+  .card{ border:1px solid var(--line); border-radius:5pt; overflow:hidden; background:#fff; }
+  .card.fair{ border:1.2pt solid var(--m1-bd); }
+  .ctop{ display:flex; gap:5pt; align-items:center; padding:2.5pt 5pt 2pt; }
+  .thumb{
+    flex:0 0 auto; width:14pt; height:14pt; border-radius:4pt;
+    display:flex; align-items:center; justify-content:center; font-size:9.5pt; line-height:1;
+  }
+  .ctitle{ margin:0; font-size:6.2pt; font-weight:700; line-height:1.06; min-width:0; }
+  .rate{ display:grid; grid-template-columns:repeat(3,1fr); gap:2pt; padding:0 5pt 2.5pt; }
+  .rc{
+    border-radius:3pt; padding:1.8pt 0; text-align:center; border:1px solid transparent;
+    display:flex; flex-direction:row; align-items:baseline; justify-content:center; gap:1.6pt; line-height:1.02;
+  }
+  .rc .n{ font-size:5.8pt; font-weight:800; } .rc .w{ font-size:4.6pt; }
+  .rc.r1{ background:#fceee3; color:#9a3a02; border-color:#f3cba9; }
+  .rc.r0{ background:#f3f4f8; color:#586172; border-color:#e1e4ec; }
+  .rc.r2{ background:var(--boost-bg); color:var(--boost-ink); border-color:var(--boost-bd); }
+  .rc.r3{ background:#cdeeda; color:#0b6035; border-color:#97d6b2; }
+  .rc.sel{ box-shadow:0 0 0 1pt rgba(32,40,58,.8) inset; }
+  .reason{
+    padding:2pt 5pt; font-size:5.4pt; line-height:1.22;
+    border-top:1px solid var(--line);
+  }
+  .reason .nm{ font-weight:800; }
+  .reason .txt{ color:var(--ink-soft); font-weight:500; }
+  .reason.dis{ background:var(--boost-bg); border-left-color:var(--boost); } .reason.dis .nm{ color:var(--boost-ink); }
+  .reason.m1{ background:var(--m1-bg);   border-left-color:var(--m1);   } .reason.m1 .nm{ color:var(--m1-ink); }
+  .reason.m2{ background:var(--m2-bg);   border-left-color:var(--m2);   } .reason.m2 .nm{ color:var(--m2-ink); }
+</style>
+</head>
+<body>
+<div class="figure" id="figure">
+  <div class="strip">
+
+    <!-- left column: A over B -->
+    <div class="left">
+      <section class="panel a">
+        <div class="head"><span class="badge">A</span><h3 class="title">Say what you want</h3></div>
+        <div class="abody">
+          <div class="brief">
+            “More <b>green spaces</b>, <b>playgrounds</b> and safe <b>bike paths</b> nearby — but no new <b>parking lots</b> and fewer <b>speed cameras</b>.”
+          </div>
+        </div>
+      </section>
+
+      <div class="arrowV">&darr;</div>
+
+      <section class="panel">
+        <div class="head"><span class="badge">B</span><h3 class="title">Review &amp; refine</h3></div>
+        <p class="gl want">Want</p>
+        <div class="chips">
+          <span class="schip want"><span class="lbl">green spaces</span><span class="x">&times;</span></span>
+          <span class="schip want"><span class="lbl">playgrounds</span><span class="x">&times;</span></span>
+          <span class="schip want"><span class="lbl">bike paths</span><span class="x">&times;</span></span>
+        </div>
+        <p class="gl avoid">Avoid</p>
+        <div class="chips">
+          <span class="schip avoid"><span class="lbl">parking lots</span><span class="x">&times;</span></span>
+          <span class="schip avoid"><span class="lbl">speed cameras</span><span class="x">&times;</span></span>
+          <span class="schip add">+ add</span>
+        </div>
+        <span class="cbtn">Build my feed &rarr;</span>
+      </section>
+    </div>
+
+    <div class="arrowH">&rarr;</div>
+
+    <!-- right column: C -->
+    <section class="panel colC">
+      <div class="head"><span class="badge">C</span><h3 class="title">A feed that balances discovery &amp; fairness</h3></div>
+      <div class="feed" id="feedList"></div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  function rate(sel){
+    var cells = [["r1","−1","reject"],["r0","0","neutral"],["r2","+1","support"]];
+    return '<div class="rate">' + cells.map(function(c,i){
+      return '<span class="rc '+c[0]+(i===sel?' sel':'')+'"><span class="n">'+c[1]+'</span><span class="w">'+c[2]+'</span></span>';
+    }).join("") + '</div>';
+  }
+  var feed = [
+    { icon:"<svg viewBox='0 0 24 24' width='11pt' height='11pt' fill='none' stroke='#3a4252' stroke-width='1.4' stroke-linejoin='round'><ellipse cx='12' cy='7.6' rx='2.1' ry='3.5'/><ellipse cx='12' cy='7.6' rx='2.1' ry='3.5' transform='rotate(60 12 12)'/><ellipse cx='12' cy='7.6' rx='2.1' ry='3.5' transform='rotate(120 12 12)'/><ellipse cx='12' cy='7.6' rx='2.1' ry='3.5' transform='rotate(180 12 12)'/><ellipse cx='12' cy='7.6' rx='2.1' ry='3.5' transform='rotate(240 12 12)'/><ellipse cx='12' cy='7.6' rx='2.1' ry='3.5' transform='rotate(300 12 12)'/><circle cx='12' cy='12' r='2.1' fill='#3a4252' stroke='none'/></svg>", bg:"#f1f3f7", title:"1000 blossoms for the city", sel:2,
+      m:"dis", nm:"Discovery", txt:'a project you asked for — keeps you exploring.' },
+    { icon:"<svg viewBox='0 0 24 24' width='11pt' height='11pt' fill='none' stroke='#3a4252' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M7.6 14.6h8.8l-1.1 6.4H8.7z'/><line x1='7' y1='14.6' x2='17' y2='14.6'/><path d='M12 14.6V8'/><path d='M12 9.6C9 9.6 7.4 7.8 7.2 5.6c2.6-.1 4.5 1.6 4.8 4z'/><path d='M12 11.1c2.7 0 4.4-1.6 4.6-3.7-2.5-.1-4.3 1.5-4.6 3.7z'/></svg>", bg:"#f1f3f7", title:"Pergola for the city garden", sel:null, frame:"fair",
+      m:"m1", nm:"Fairness", txt:'under-exposed, so it is given extra visibility.' },
+    { icon:"<svg viewBox='0 0 24 24' width='11pt' height='11pt' fill='none' stroke='#3a4252' stroke-width='1.5' stroke-linecap='round'><rect x='8.5' y='4' width='7' height='15' rx='2.4'/><line x1='8.5' y1='8.5' x2='6.8' y2='8.5'/><line x1='15.5' y1='8.5' x2='17.2' y2='8.5'/><line x1='12' y1='19' x2='12' y2='21'/><circle cx='12' cy='7.6' r='1.2' fill='#3a4252' stroke='none'/><circle cx='12' cy='11.5' r='1.2' fill='#3a4252' stroke='none'/><circle cx='12' cy='15.4' r='1.2' fill='#3a4252' stroke='none'/></svg>", bg:"#f1f3f7", title:"Speed display with smiley face", sel:0,
+      m:"m2", nm:"Crowdsourced vetting", txt:'downvotes flag low-quality, infeasible, or duplicate proposals.' }
+  ];
+  function card(p){
+    var rsn = '<div class="reason '+p.m+'"><span class="nm">'+p.nm+' — </span>'
+            + '<span class="txt">'+p.txt+'</span></div>';
+    return '<div class="card'+(p.frame?' '+p.frame:'')+'">'
+      + '<div class="ctop"><span class="thumb" style="background:'+p.bg+'">'+p.icon+'</span>'
+      + '<h4 class="ctitle">'+p.title+'</h4></div>'
+      + rate(p.sel) + rsn + '</div>';
+  }
+  document.getElementById("feedList").innerHTML = feed.map(card).join("");
+</script>
+</body>
+</html>

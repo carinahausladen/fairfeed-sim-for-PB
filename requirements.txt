@@ -1,0 +1,16 @@
+# Reproduction environment for "Fair Feed Ranking for Participatory Budgeting".
+# The simulation seeds numpy's PCG64 generator, whose stream is stable across
+# numpy versions, so the numbers reproduce on any recent build. Versions below
+# are the ones the package was last verified against (Python 3.13).
+
+# --- simulation + figures (paper_numbers.py / fig_2.py) ---
+numpy>=1.24          # tested 2.4.4
+pandas>=1.5          # tested 3.0.3
+matplotlib>=3.6      # tested 3.10.9
+
+# --- onboarding figure render (fig_1.py) ---
+pillow>=9.0          # tested 12.2.0 ; also needs Google Chrome / Chromium on PATH
+
+# Scraping deps (requests, beautifulsoup4) are NOT needed for reproduction — the
+# scrapers live in ../scrape/ and run off the live site, not this
+# package. See ../scrape/scrapers/README.md if you want to refresh data.

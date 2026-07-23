@@ -1,0 +1,12 @@
+# Internet Archive snapshots of Consul Democracy budget-feed sort menus
+# Captured 2026-06-14. Dropdown ("Sortieren nach" / "Ordenar por") verified present in each.
+
+## German cluster (demokratie.today)
+Munich 2025         https://web.archive.org/web/20260614074420/https://unser.muenchen.de/muenchenbudget2025
+Munich 2026         https://web.archive.org/web/20260614074451/https://unser.muenchen.de/muenchenbudget2026?projekt_phase_id=688
+Garching            https://web.archive.org/web/20260614075526/https://beteiligung.garching.de/buergerbudget?projekt_phase_id=11
+Unterschleissheim   https://web.archive.org/web/20260614075606/https://consul.unterschleissheim.de/buergerbudget-2026?projekt_phase_id=497
+Gelsenkirchen       https://web.archive.org/web/20260614075637/https://mitmachen.gelsenkirchen.de/gruenes-buergerbudget
+Jena                https://web.archive.org/web/20260614075801/https://mitmachen.jena.de/buergerbudget
+
+## International cluster (snapshot URLs appended once Save-Page-Now completes; live source URLs are in deployments.csv)

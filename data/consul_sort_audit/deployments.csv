@@ -1,0 +1,19 @@
+city,country,orderings_order_params,default,provenance,source_url
+Munich 2025,DE,"random;newest;comments_count",random,live,https://unser.muenchen.de/muenchenbudget2025
+Munich 2026,DE,"random;newest;comments_count;total_votes",random,live,https://unser.muenchen.de/muenchenbudget2026?projekt_phase_id=688
+Garching,DE,"random;newest;comments_count",random,live,https://beteiligung.garching.de/buergerbudget?projekt_phase_id=11
+Jena,DE,"random;newest;comments_count",random,live,https://mitmachen.jena.de/buergerbudget
+Unterschleissheim,DE,"random;newest;comments_count;total_votes",random,live,https://consul.unterschleissheim.de/buergerbudget-2026?projekt_phase_id=497
+Gelsenkirchen,DE,"random;newest;total_votes;hot_score;alphabetical",random,live,https://mitmachen.gelsenkirchen.de/gruenes-buergerbudget
+Marchamalo,ES,"random;confidence_score",random,live,https://decide.marchamalo.es/budgets/9/investments
+Valencia,ES,"random;creation_date_asc",random,live,https://vlcparticipa.valencia.es/budgets/8/investments
+Valladolid,ES,"random;confidence_score",random,live,https://www10.ava.es/presupuestosparticipativos/budgets/6/investments
+Getafe,ES,"random;confidence_score",random,live,https://participa.getafe.es/budgets/8/investments
+Sao Paulo,BR,"random;cached_votes_up",random,archive_2026-01-23,https://participemais.prefeitura.sp.gov.br/budgets/6/investments
+Cancun,MX,"random",random,live,https://participa-y-transforma.cancun.gob.mx/budgets/1/investments
+Aarhus,DK,"random;price",random,live,https://www.sammenomaarhus.dk/budgets/29/investments
+Glasgow,UK-Scotland,"random",random,live-balloting,https://glasgow.communitychoices.scot/budgets/5/investments
+Inverclyde,UK-Scotland,"random",random,live-balloting,https://inverclyde.communitychoices.scot/budgets/6/investments
+North Lanarkshire,UK-Scotland,"random",random,live-balloting,https://nla.communitychoices.scot/budgets/1/investments
+Renfrewshire,UK-Scotland,"random",random,live-balloting,https://renfrewshire.communitychoices.scot/budgets/4/investments
+Fryslan,NL,"random",random,live-balloting,https://stimfanfryslan.frl/budgets/3/investments

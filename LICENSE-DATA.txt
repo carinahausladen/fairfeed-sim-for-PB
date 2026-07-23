@@ -1,0 +1,20 @@
+Data license — Creative Commons Attribution 4.0 International (CC-BY-4.0)
+
+Copyright (c) 2026 Carina I. Hausladen
+
+The data files under `data/` (the public MünchenBudget calibration snapshot and
+the Consul feed-ordering audit) are licensed under the Creative Commons
+Attribution 4.0 International License (CC-BY-4.0).
+
+You are free to share and adapt this data for any purpose, provided you give
+appropriate credit by citing:
+
+  Carina I. Hausladen. 2026. Fair Feed Ranking for Participatory Budgeting.
+  In International Conference on Information Technology for Social Good
+  (GoodIT '26). ACM. https://doi.org/10.1145/3794786.3830735
+
+Full licence text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Note on personal data: the data distributed here contains no personal data — it
+is public MünchenBudget proposal metadata plus a feed-ordering audit. See
+data/README.md.
