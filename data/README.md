@@ -14,13 +14,25 @@ data/
 
 `ballot.json` is public proposal metadata (title, votes, comments count, status)
 from the **Consul Democracy** deployment *MünchenBudget* at
-<https://unser.muenchen.de/>. It contains **no personal data** — no author names,
-no user identifiers, no free-text comment bodies. The live site changes between
-cycles, so this is a **frozen snapshot**; re-fetching it will *not* reproduce the
-paper. Use this snapshot.
+<https://unser.muenchen.de/> — 14 records, the anchored 2025 ballot proposals. It
+carries **no author names, no user identifiers and no comment text**, and the
+`description` field is empty in every record. Each record does keep the
+proposal's public URL, so the snapshot stays verifiable against its source. The
+live site changes between cycles, so this is a **frozen snapshot**; re-fetching
+it will *not* reproduce the paper. Use this snapshot.
 
 `consul_sort_audit/` records which feed orderings each live Consul deployment
 offers (the basis for Table 1); `onboarding/` is the source HTML for Figure 1.
+
+## Licence
+
+The **compilation** under `data/` — the selection, extraction and arrangement of
+these records — is CC-BY-4.0; see [`../LICENSE-DATA.txt`](../LICENSE-DATA.txt).
+
+The proposal titles it reproduces were written by MünchenBudget participants and
+published by the City of Munich. No rights in that text are claimed or granted
+here: it appears as factual metadata about a public participatory-budgeting
+round, and any rights in it remain with its authors and with the City of Munich.
 
 ## Data statement
 

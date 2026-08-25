@@ -131,8 +131,11 @@ never use that corpus, so everything else reproduces from `data/` here.
 ## License
 
 - **Code** (`*.py`, this README): MIT — see [`LICENSE`](LICENSE).
-- **Data** (`data/`): Creative Commons Attribution 4.0 (CC-BY-4.0) — see
-  [`LICENSE-DATA.txt`](LICENSE-DATA.txt).
+- **Data** (`data/`): the *compilation* — the selection, extraction and
+  arrangement of the records — is Creative Commons Attribution 4.0 (CC-BY-4.0).
+  The proposal titles it reproduces were written by MünchenBudget participants
+  and published by the City of Munich; no rights in that text are claimed or
+  granted here. See [`LICENSE-DATA.txt`](LICENSE-DATA.txt).
 
 ## Citation
 
