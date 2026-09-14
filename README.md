@@ -18,8 +18,20 @@ MünchenBudget participatory-budgeting data.
 ├── paper_numbers.py    # every number the paper quotes (4 sections; see below)
 ├── requirements.txt
 ├── data/               # public calibration data + feed audit (see data/README.md)
+├── docs/               # interactive playground (GitHub Pages), see below
 └── output/             # generated figures land here
 ```
+
+## Interactive playground
+
+`docs/` is a web page where anyone can play with the simulation: pick a feed,
+switch on the reject button or fake comments, and watch which proposals reach the
+ballot. The paper's results panels are recomputed live in the browser.
+
+- `docs/sim.js` is a JavaScript port of `simulation.py`, running on the same
+  universe (`docs/universe.json`, written by `python3 docs/export_universe.py`).
+- `node docs/check.js` compares the browser engine with the paper's numbers.
+- Preview locally: `cd docs && python3 -m http.server`, then open <http://localhost:8000>.
 
 ## Quickstart
 
