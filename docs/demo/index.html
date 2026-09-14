@@ -57,6 +57,14 @@
     gap: 40px;
   }
 
+  /* On wide windows (a laptop, a 1280×720 slide iframe) the four screens stay
+     in one row and the script below scales the row to fit the window. */
+  @media (min-width: 700px) {
+    html, body { overflow: hidden; }
+    .wrap { width: max-content; max-width: none; margin: 0; padding-block: 24px; gap: 12px; }
+    .gallery { flex-wrap: nowrap; }
+  }
+
   /* ─── PAGE HEADER ─────────────────────────────────────────── */
   .page-head { display: flex; flex-direction: column; gap: 12px; max-width: 64ch; }
   .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--blue-ink); }
@@ -497,6 +505,23 @@
 </div>
 
 <script>
+/* Fit the row of four screens into the window by scaling it as one piece. */
+(function () {
+  var stage = document.querySelector(".wrap");
+  function fit() {
+    stage.style.transform = "";
+    if (window.innerWidth < 700) return;
+    var w = stage.scrollWidth, h = stage.scrollHeight;
+    var s = Math.min(1, window.innerWidth / w, window.innerHeight / h);
+    stage.style.transformOrigin = "top left";
+    stage.style.transform = "translate(" + Math.max(0, (window.innerWidth - w * s) / 2) + "px, 0) scale(" + s + ")";
+  }
+  window.addEventListener("resize", fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener("load", fit);
+  fit();
+})();
+
 (function () {
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
