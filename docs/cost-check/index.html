@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crowd Cost Plans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+  /* Light only, on purpose: the app is white, so this page is white in every theme. */
+  :root {
+    color-scheme: light;
+    --page:        #FFFFFF;
+    --deck:        #F2F5F8;
+    --surface-2:   #F6F8FA;
+    --ink:         #122230;
+    --ink-soft:    #52616D;
+    --ink-faint:   #84919B;
+    --line:        #DDE4EA;
+    --line-strong: #C5D0D8;
+    --blue:        #1779BA;
+    --blue-ink:    #0E5486;
+    --blue-wash:   #E4EFF7;
+    --green:       #1F7A4D;
+    --red:         #BF4330;
+    --shadow:      0 18px 44px rgba(16, 36, 54, 0.12);
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans:  "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  [hidden] { display: none !important; }
+  body { background: var(--page); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  button, input { font-family: inherit; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .stage { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; padding-inline: 20px; padding-block: 32px 48px; }
+  /* On wide windows (a laptop, a 1280×720 slide iframe) the three screens stay in one row and the script scales the row to fit. */
+  @media (min-width: 700px) {
+    html, body { overflow: hidden; }
+    .stage { width: max-content; flex-wrap: nowrap; padding-block: 24px; }
+  }
+
+  /* ─── PHONE SHELL (same as the demo) ─── */
+  .phone { width: 300px; max-width: 100%; height: 620px; border: 1px solid var(--line-strong); border-radius: 28px; overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; background: var(--page); }
+  .phone.ping { animation: ping 700ms ease; }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 var(--blue), var(--shadow); } 100% { box-shadow: 0 0 0 14px transparent, var(--shadow); } }
+  .head { padding: 13px 15px 11px; display: flex; flex-direction: column; gap: 9px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+  .head-row { display: flex; align-items: center; gap: 8px; min-height: 22px; }
+  .mark { width: 22px; height: 22px; border-radius: 6px; background: var(--blue); display: grid; place-items: center; flex-shrink: 0; }
+  .mark svg { display: block; }
+  .wordmark { font-weight: 600; font-size: 14px; flex: 1; }
+  .back { font-size: 12px; font-weight: 600; color: var(--blue-ink); }
+  .saved { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-ink); }
+
+  .body { flex: 1; overflow-y: auto; scrollbar-width: none; padding: 14px 15px; display: flex; flex-direction: column; gap: 12px; }
+  .body::-webkit-scrollbar { display: none; }
+  .body > * { flex-shrink: 0; }   /* the screen scrolls; boxes never squash */
+  .body h3 { font-family: var(--serif); font-size: 18px; font-weight: 600; line-height: 1.22; letter-spacing: -0.01em; text-wrap: balance; }
+  .ask { font-family: var(--serif); font-size: 15px; font-weight: 600; line-height: 1.25; text-wrap: balance; }
+
+  .btn { border: 1.5px solid var(--blue); border-radius: 999px; background: var(--blue); color: #FFFFFF; font-size: 14px; font-weight: 600; padding: 10px 16px; cursor: pointer; }
+  .btn.push { margin-top: auto; }
+
+  /* ─── SCREEN 0: the feed card ─── */
+  .bar3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .bar3 span { height: 3px; border-radius: 2px; background: var(--blue); }
+  .feed-deck { flex: 1; min-height: 0; background: var(--deck); padding: 12px 12px 10px; display: flex; }
+  .feed-card { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; background: var(--page); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 6px 18px rgba(16, 36, 54, 0.10), 0 1px 2px rgba(16, 36, 54, 0.06); padding: 12px 13px; display: flex; flex-direction: column; gap: 8px; }
+  .feed-card::-webkit-scrollbar { display: none; }
+  .feed-card > * { flex-shrink: 0; }
+  .feed-title { font-family: var(--serif); font-size: 18px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+  .feed-img { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; display: block; background: var(--deck); }
+  .feed-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .feed-more { align-self: flex-start; background: none; border: none; padding: 0; font-size: 12.5px; font-weight: 600; color: var(--blue-ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .feed-meta { font-size: 11.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums; margin-top: auto; }
+  .check-costs { width: 100%; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--page); padding: 8px 11px; font-size: 13px; font-weight: 600; color: var(--blue-ink); cursor: pointer; }
+  .check-costs:hover { background: var(--blue-wash); }
+  .feed-bar { flex-shrink: 0; border-top: 1px solid var(--line); padding: 9px 14px 11px; display: flex; flex-direction: column; gap: 6px; }
+  .feed-row { display: flex; justify-content: center; align-items: center; gap: 22px; }
+  .sw { width: 46px; height: 46px; border-radius: 50%; padding: 0; display: grid; place-items: center; font-size: 19px; font-weight: 600; line-height: 1; background: var(--page); border: 1.5px solid var(--line-strong); color: var(--ink-soft); cursor: pointer; box-shadow: 0 2px 6px rgba(16, 36, 54, 0.08); }
+  .sw.neutral { width: 38px; height: 38px; font-size: 16px; }
+  .sw.less { color: var(--red); border-color: color-mix(in srgb, var(--red) 55%, var(--line)); }
+  .sw.more { color: var(--green); border-color: color-mix(in srgb, var(--green) 55%, var(--line)); }
+  .feed-progress { text-align: center; font-size: 11.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .feed-progress strong { color: var(--ink-soft); font-weight: 600; }
+
+  /* ─── SCREEN 1: adjust the plan ─── */
+  .plan { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .adj-line { padding: 7px 11px 6px; border-top: 1px solid var(--line); display: flex; flex-direction: column; }
+  .adj-line:first-child { border-top: none; }
+  .check-top { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; }
+  .check-top small { color: var(--ink-faint); font-size: 11px; font-weight: 500; margin-left: 4px; }
+  .check-top .val { font-weight: 600; font-variant-numeric: tabular-nums; }
+  /* red/green mean reject/support in the app, so cost changes stay neutral */
+  .delta { font-size: 11px; font-weight: 600; color: var(--ink-soft); margin-left: 6px; font-variant-numeric: tabular-nums; }
+
+  .est { -webkit-appearance: none; appearance: none; width: 100%; height: 24px; background: transparent; cursor: pointer; display: block; }
+  .est::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--line-strong); }
+  .est::-moz-range-track { height: 4px; border-radius: 2px; background: var(--line-strong); }
+  .est::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; margin-top: -7px; border-radius: 50%; background: var(--ink); border: 2px solid #FFFFFF; box-shadow: 0 1px 4px rgba(16, 36, 54, 0.35); }
+  .est::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--ink); border: 2px solid #FFFFFF; box-shadow: 0 1px 4px rgba(16, 36, 54, 0.35); }
+  /* the blue centre tick marks the plan; its amount sits underneath */
+  .adj-wrap { position: relative; }
+  .adj-wrap::before { content: ""; position: absolute; left: 50%; top: 5px; width: 2px; height: 14px; margin-left: -1px; background: var(--blue); border-radius: 1px; pointer-events: none; }
+  .adj-plan { position: relative; height: 13px; font-size: 10.5px; font-weight: 600; color: var(--blue-ink); font-variant-numeric: tabular-nums; }
+  .adj-plan span { position: absolute; left: 50%; top: -3px; transform: translateX(-50%); white-space: nowrap; }
+
+  .add-btn { width: 100%; border: none; border-top: 1px solid var(--line); background: var(--page); text-align: left; padding: 8px 11px; font-size: 12.5px; font-weight: 600; color: var(--blue-ink); cursor: pointer; }
+  .add-row { display: grid; grid-template-columns: 1fr 78px 22px; gap: 6px; align-items: center; padding: 7px 11px; border-top: 1px solid var(--line); }
+  .add-row input { width: 100%; min-width: 0; border: 1px solid var(--line-strong); border-radius: 6px; padding: 4px 7px; font-size: 12px; color: var(--ink); background: var(--page); }
+  .add-row input[type=number] { font-variant-numeric: tabular-nums; }
+  .add-row .rm { border: none; background: none; font-size: 17px; line-height: 1; color: var(--ink-faint); cursor: pointer; padding: 0; }
+  .your-total { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 0 10px; padding: 8px 11px; border-top: 1.5px solid var(--ink); }
+  .your-total span { font-weight: 700; font-size: 13px; }
+  .your-total b { font-family: var(--serif); font-size: 20px; font-variant-numeric: tabular-nums; }
+  .your-total small { grid-column: 1 / -1; font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ─── SCREEN 2: where the total lies ─── */
+  .total-card { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 0 10px; border: 1px solid var(--line); border-radius: 12px; padding: 9px 12px; }
+  .total-card span { font-weight: 700; font-size: 13px; }
+  .total-card b { font-family: var(--serif); font-size: 22px; font-variant-numeric: tabular-nums; }
+  .total-card small { grid-column: 1 / -1; font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .reveal { border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); padding: 10px 10px 8px; display: flex; flex-direction: column; gap: 6px; }
+  .reveal svg { display: block; width: 100%; height: auto; }
+  .scale { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  /* legend glyphs match the marks in the strip */
+  .key { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 11px; color: var(--ink-soft); align-items: center; }
+  .key span { display: inline-flex; align-items: center; gap: 4px; }
+  .k-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-faint); opacity: 0.6; }
+  .k-med { width: 2px; height: 11px; background: var(--ink); }
+  .k-plan { width: 0; height: 11px; border-left: 2px dashed var(--blue); }
+  .k-you { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 8px solid var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) { .phone.ping { animation: none; } }
+  .credits { position: fixed; left: 12px; bottom: 8px; margin: 0; font-size: 11px; }
+  .credits a { color: var(--ink-faint); }
+</style>
+</head>
+<body>
+<main class="stage">
+
+  <!-- ══ Screen 0: the proposal in the feed ══ -->
+  <div class="phone">
+    <div class="head">
+      <div class="head-row">
+        <span class="mark"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 3h8M2 6h6M2 9h4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+        <span class="wordmark">FairFeed</span>
+      </div>
+      <div class="bar3"><span></span><span></span><span></span></div>
+    </div>
+    <div class="feed-deck">
+      <article class="feed-card">
+        <h3 class="feed-title">Installing drinking fountains at busy spots</h3>
+        <img class="feed-img" src="img/fountains.jpg" alt="">
+        <p class="feed-desc">New drinking fountains where many people pass and where no fountain is nearby: by playgrounds, a bus stop and the library. Usable by people with reduced mobility.</p>
+        <button class="feed-more" type="button">Read more →</button>
+        <button class="check-costs" type="button" id="e0-check">
+          <span>Check the costs</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <span class="feed-meta">373 votes</span>
+      </article>
+    </div>
+    <div class="feed-bar">
+      <div class="feed-row">
+        <button class="sw less" type="button" aria-label="Reject">✕</button>
+        <button class="sw neutral" type="button" aria-label="Neutral">–</button>
+        <button class="sw more" type="button" aria-label="Support">✓</button>
+      </div>
+      <p class="feed-progress"><strong>14 rated</strong> · 23 of 124</p>
+    </div>
+  </div>
+
+  <!-- ══ Screen 1: adjust the plan ══ -->
+  <div class="phone" id="e-screen1">
+    <div class="head">
+      <div class="head-row">
+        <span class="mark"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 3h8M2 6h6M2 9h4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+        <span class="wordmark">FairFeed</span>
+        <span class="back">← Proposal</span>
+      </div>
+    </div>
+    <div class="body">
+      <h3>Installing drinking fountains at busy spots</h3>
+      <p class="ask">Is each cost too low or too high?</p>
+      <div class="plan" id="e-plan">
+        <div class="adj-line" data-name="5 drinking fountains" data-plan="16000" data-ex="0"></div>
+        <div class="adj-line" data-name="Water-mains connection" data-plan="6500" data-ex="31"></div>
+        <div class="adj-line" data-name="Paving and drainage" data-plan="2500" data-ex="0"></div>
+        <div class="adj-line" data-name="Running costs" data-unit="per year" data-plan="3250" data-ex="-8"></div>
+        <div id="e-added"></div>
+        <button class="add-btn" type="button" id="e-add">+ Add a line</button>
+        <div class="your-total">
+          <span>Total, 10 years</span><b id="e-total">€57,500</b>
+          <small id="e-vs">Plan €57,500</small>
+        </div>
+      </div>
+      <button class="btn push" type="button" id="e-save">Save estimate →</button>
+    </div>
+  </div>
+
+  <!-- ══ Screen 2: only after saving ══ -->
+  <div class="phone" id="e-screen2">
+    <div class="head">
+      <div class="head-row">
+        <span class="mark"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 3h8M2 6h6M2 9h4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+        <span class="wordmark">FairFeed</span>
+        <span class="saved">✓ Estimate saved</span>
+      </div>
+    </div>
+    <div class="body">
+      <h3>Installing drinking fountains at busy spots</h3>
+      <div class="total-card">
+        <span>Total, 10 years</span><b id="e2-total">€57,500</b>
+        <small id="e2-vs">Plan €57,500</small>
+      </div>
+      <div class="reveal">
+        <svg id="e-svg" viewBox="0 0 270 56" role="img" aria-label="Other people's totals, the median, the plan and this estimate"></svg>
+        <div class="scale"><span>€30k</span><span>€60k</span><span>€120k</span></div>
+        <div class="key">
+          <span><i class="k-dot"></i>37 others</span>
+          <span><i class="k-med"></i>Median <b class="num" id="e-med"></b></span>
+          <span><i class="k-plan"></i>Plan €57,500</span>
+          <span><i class="k-you"></i>You</span>
+        </div>
+      </div>
+      <button class="btn push" type="button">Back to feed</button>
+    </div>
+  </div>
+
+</main>
+
+<p class="credits"><a href="credits.html" target="_blank" rel="noopener">Photo credits</a></p>
+
+<script>
+/* Fit the row of three screens into the window by scaling it as one piece. */
+(function () {
+  var stage = document.querySelector(".stage");
+  function fit() {
+    stage.style.transform = "";
+    if (window.innerWidth < 700) return;
+    var w = stage.scrollWidth, h = stage.scrollHeight;
+    var s = Math.min(1, window.innerWidth / w, window.innerHeight / h);
+    stage.style.transformOrigin = "top left";
+    stage.style.transform = "translate(" + Math.max(0, (window.innerWidth - w * s) / 2) + "px, 0) scale(" + s + ")";
+  }
+  window.addEventListener("resize", fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener("load", fit);
+  fit();
+})();
+
+(function () {
+  function eur(n) { return "€" + Math.round(n).toLocaleString("en-GB"); }
+  function round(v) { var s = v < 1000 ? 50 : v < 10000 ? 500 : v < 100000 ? 1000 : 5000; return Math.round(v / s) * s; }
+  function pct(a, p) { var n = Math.round((a / p - 1) * 100); return n === 0 ? "" : (n > 0 ? "+" : "−") + Math.abs(n) + "%"; }
+  function ping(el) { el.classList.remove("ping"); void el.offsetWidth; el.classList.add("ping"); }
+
+  /* invented example crowd: 37 log-normal totals */
+  function makeCrowd(center, seed, sigma) {
+    function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+    var out = [];
+    for (var i = 0; i < 37; i++) {
+      var z = Math.sqrt(-2 * Math.log(rnd())) * Math.cos(2 * Math.PI * rnd());
+      out.push(round(Math.exp(Math.log(center) + sigma * z)));
+    }
+    return out.sort(function (a, b) { return a - b; });
+  }
+
+  /* the strip: grey dots (others), black line (median), blue dashes (plan), black triangle (you) */
+  function strip(o) {
+    var W = 270, PAD = 9, top = 4, bot = o.h - 12;
+    function x(v) { var t = (Math.log(v) - o.lo) / (o.hi - o.lo); return (PAD + Math.max(0, Math.min(1, t)) * (W - 2 * PAD)).toFixed(1); }
+    var s = "";
+    o.grid.forEach(function (g) { s += '<line x1="' + x(g) + '" x2="' + x(g) + '" y1="' + top + '" y2="' + bot + '" stroke="#DDE4EA" stroke-width="1"/>'; });
+    var rows = 4, step = (bot - top - 8) / rows;
+    o.sorted.forEach(function (v, k) {
+      s += '<circle cx="' + x(v) + '" cy="' + (top + 4 + ((k * 7) % (rows + 1)) * step).toFixed(1) + '" r="3.2" fill="#84919B" fill-opacity="0.55"/>';
+    });
+    s += '<line x1="' + x(o.median) + '" x2="' + x(o.median) + '" y1="' + top + '" y2="' + bot + '" stroke="#122230" stroke-width="2"/>';
+    s += '<line x1="' + x(o.plan) + '" x2="' + x(o.plan) + '" y1="' + top + '" y2="' + bot + '" stroke="#1779BA" stroke-width="2" stroke-dasharray="3 2"/>';
+    s += '<path d="M' + x(o.you) + ' ' + (bot + 2) + ' l-5 8 h10 z" fill="#122230"/>';
+    return s;
+  }
+
+  var E = { lo: Math.log(30000), hi: Math.log(120000), years: 10, plan: 57500 };
+  var eCrowd = makeCrowd(66000, 19, 0.22).map(function (v) { return Math.max(31000, Math.min(118000, v)); }), eMed = eCrowd[18];
+  document.getElementById("e-med").textContent = eur(eMed);
+
+  /* screen 0 → screen 1 */
+  var screen1 = document.getElementById("e-screen1"), screen2 = document.getElementById("e-screen2");
+  document.getElementById("e0-check").addEventListener("click", function () { ping(screen1); });
+
+  /* screen 1: each line starts at the plan; slider −100…100 = ×¼ … ×4 (log) */
+  var eLines = [];
+  document.querySelectorAll("#e-plan .adj-line").forEach(function (row) {
+    var d = row.dataset, plan = +d.plan;
+    row.innerHTML =
+      '<div class="check-top"><span>' + d.name + (d.unit ? '<small>' + d.unit + '</small>' : '') + '</span><span><span class="val"></span><span class="delta"></span></span></div>' +
+      '<div class="adj-wrap"><input type="range" class="est" id="e-adj-' + eLines.length + '" min="-100" max="100" step="1" value="' + d.ex + '" aria-label="Adjust: ' + d.name + '"></div>' +
+      '<div class="adj-plan"><span>' + eur(plan) + '</span></div>';
+    var input = row.querySelector("input"), val = row.querySelector(".val"), delta = row.querySelector(".delta");
+    var line = {
+      plan: plan, perYear: !!d.unit,
+      amount: function () { return round(plan * Math.pow(4, input.value / 100)); },
+      paint: function () { var a = line.amount(); val.textContent = eur(a); delta.textContent = pct(a, plan); }
+    };
+    input.addEventListener("input", function () { line.paint(); paintE(); });
+    eLines.push(line);
+  });
+
+  /* lines people add: a name and a one-off amount */
+  var eAdded = [], addedBox = document.getElementById("e-added");
+  function addLine(name, amount) {
+    var k = eAdded.length, row = document.createElement("div");
+    row.className = "add-row";
+    row.innerHTML =
+      '<input type="text" id="e-add-name-' + k + '" placeholder="What is missing?" aria-label="Missing cost">' +
+      '<input type="number" id="e-add-amt-' + k + '" placeholder="€" min="0" step="100" aria-label="Amount in euros">' +
+      '<button type="button" class="rm" aria-label="Remove this line">×</button>';
+    var nameIn = row.children[0], amtIn = row.children[1];
+    nameIn.value = name || ""; amtIn.value = amount || "";
+    var item = { amount: function () { return Math.max(0, +amtIn.value || 0); } };
+    amtIn.addEventListener("input", paintE);
+    row.children[2].addEventListener("click", function () { eAdded.splice(eAdded.indexOf(item), 1); row.remove(); paintE(); });
+    eAdded.push(item); addedBox.appendChild(row);
+    if (!name) nameIn.focus();
+    paintE();
+  }
+  document.getElementById("e-add").addEventListener("click", function () { addLine(); });
+
+  function eTotal() {
+    return eLines.reduce(function (s, l) { return s + l.amount() * (l.perYear ? E.years : 1); }, 0) +
+      eAdded.reduce(function (s, a) { return s + a.amount(); }, 0);
+  }
+  function vsText(t) { var p = pct(t, E.plan); return "Plan " + eur(E.plan) + (p ? " · " + p : ""); }
+  function paintE() {
+    var t = eTotal();
+    document.getElementById("e-total").textContent = eur(t);
+    document.getElementById("e-vs").textContent = vsText(t);
+  }
+
+  /* screen 2: filled only when the estimate is saved */
+  function paintE2() {
+    var t = eTotal();
+    document.getElementById("e2-total").textContent = eur(t);
+    document.getElementById("e2-vs").textContent = vsText(t);
+    document.getElementById("e-svg").innerHTML = strip({ sorted: eCrowd, median: eMed, plan: E.plan, you: t, lo: E.lo, hi: E.hi, h: 56, grid: [30000, 60000, 120000] });
+  }
+  document.getElementById("e-save").addEventListener("click", function () { paintE2(); ping(screen2); });
+
+  eLines.forEach(function (l) { l.paint(); });
+  addLine("Signs at each fountain", 1000);
+  paintE(); paintE2();
+})();
+</script>
+</body>
+</html>
